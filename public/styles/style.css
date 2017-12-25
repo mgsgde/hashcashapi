@@ -6,10 +6,47 @@
   height: 30px;
   -webkit-animation: spin 2s linear infinite; /* Safari */
   animation: spin 2s linear infinite;
-  display: none;
+  visibility: 'visible';
 }
 
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+h1 {
+    text-align: center;
+}
+
+#pow {
+	margin: auto;
+    width: 850px;
+}
+
+#hashCalculation {
+	display: inline;
+}
+
+#hashTextField {
+	width: 600px;
+	display: inline;
+}
+
+#powLoader {
+	display: inline-flex;
+	visibility: hidden;
+}
+
+#sendPoWTokenButton {
+	display: block;
+	margin: 30px auto 30px auto;
+}
+
+#anzeige {
+	margin: auto;
+	display: block;
+	width: 500px;
+	height: 500px;
+	border: 2;
+	padding-bottom: 50px;
 }

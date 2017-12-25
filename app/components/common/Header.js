@@ -4,9 +4,9 @@ class Header extends React.Component {
 
 	render() {
   		return(
-  			 	<header>
-    				<h1>HashCash protected Rest Api</h1>
-  				</header>
+  			<div className="jumbotron">
+ 				 <h1>HashCash protected Rest Api</h1>      
+			</div>
   		)
 	}
 

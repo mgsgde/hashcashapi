@@ -63,18 +63,18 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 22);
+/******/ 	return __webpack_require__(__webpack_require__.s = 26);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 15:
+/***/ 18:
 /***/ (function(module, exports, __webpack_require__) {
 
 ;(function (root, factory) {
 	if (true) {
 		// CommonJS
-		module.exports = exports = factory(__webpack_require__(23));
+		module.exports = exports = factory(__webpack_require__(27));
 	}
 	else if (typeof define === "function" && define.amd) {
 		// AMD
@@ -273,13 +273,13 @@
 
 /***/ }),
 
-/***/ 22:
+/***/ 26:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-const SHA256 = __webpack_require__(15);
+const SHA256 = __webpack_require__(18);
 
 self.addEventListener('message', function (e) {
     let result = generatePoWToken(e.data.challenge, e.data.difficulty);
@@ -302,7 +302,7 @@ function generatePoWToken(_challenge, _difficulty) {
 
 /***/ }),
 
-/***/ 23:
+/***/ 27:
 /***/ (function(module, exports, __webpack_require__) {
 
 ;(function (root, factory) {

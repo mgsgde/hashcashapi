@@ -1,0 +1,44 @@
+{
+  "name": "hashcashapi",
+  "version": "1.0.0",
+  "description": "Proof of Work restricted REST Api",
+  "main": "server.js",
+  "dependencies": {
+    "assert": "^1.4.1",
+    "crypto-js": "^3.1.9-1",
+    "css-loader": "^0.28.7",
+    "express": "^4.16.2",
+    "lokijs": "^1.5.1",
+    "path": "^0.12.7",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "style-loader": "^0.19.1"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-es2017": "^6.24.1",
+    "babel-preset-react": "^6.24.1"
+  },
+  "scripts": {
+    "build": "webpack -w",
+    "dev": "nodemon server.js ",
+    "start": "node server.js",
+    "test": "mocha tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mgsgde/hashcashapi.git"
+  },
+  "keywords": [
+    "hashcash",
+    "proofofwork",
+    "pow"
+  ],
+  "author": "magnus gödde",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mgsgde/hashcashapi/issues"
+  },
+  "homepage": "https://github.com/mgsgde/hashcashapi#readme"
+}

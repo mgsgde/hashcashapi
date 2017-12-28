@@ -3,10 +3,11 @@ const app = express()
 const path = require("path");
 const loki = require('lokijs')
 const SHA256 = require("crypto-js/sha256");
+const fs = require('fs');
 
 let challengeMapping = {};
 
-app.use('/pictures/', function(req, res, next) {
+app.use('/randomPicture', function(req, res, next) {
     let nonce = req.query.nonce;
     let challenge = req.query.challenge;
     if (!challengeMapping[challenge])
@@ -42,8 +43,14 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + "/public/index.html")
 })
 
-app.get('/pictures/winter.jpg', (req, res) => {
-    res.sendFile(__dirname + "/public/pictures/winter.jpg")
+app.get('/randomPicture', (req, res) => {
+    const pictureDirectory = `${__dirname}/public/pictures`
+    fs.readdir(pictureDirectory, (err, files) => {
+        if (err) throw err;
+        let rand = files[Math.floor(Math.random() * files.length)];
+        console.log(rand)
+        res.sendFile(`${__dirname}/public/pictures/${rand}`)
+    })
 })
 
 

@@ -3,6 +3,7 @@ var React = require('react');
 import POW from "../common/POW.js";
 import Header from "../common/Header.js";
 import Anzeige from "../common/Anzeige.js";
+import DialogBox from "../common/DialogBox.js";
 
 class Main extends React.Component {
 
@@ -12,6 +13,7 @@ class Main extends React.Component {
         		<Header />
             	<POW />
             	<Anzeige />
+            	<DialogBox />
             </div>
         )
     }

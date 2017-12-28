@@ -43,6 +43,10 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + "/public/index.html")
 })
 
+app.get('/icons/snowflake.png', (req, res) => {
+    res.sendFile(__dirname + "/public/icons/snowflake.png")
+})
+
 app.get('/randomPicture', (req, res) => {
     const pictureDirectory = `${__dirname}/public/pictures`
     fs.readdir(pictureDirectory, (err, files) => {

@@ -7,7 +7,7 @@ self.addEventListener('message', function(e) {
 }, false);
 
 
-function generatePoWToken(_challenge, _difficulty) {
+async function generatePoWToken(_challenge, _difficulty) {
     let nonce = -1;
     let result;
     let arrayOfZeros = [];
@@ -17,6 +17,13 @@ function generatePoWToken(_challenge, _difficulty) {
     let stringOfZeros = arrayOfZeros.join("")
     do {
         result = SHA256(`${_challenge} + ${++nonce}`).toString();
+        self.postMessage({ nonce: nonce, hash: result });
+        await sleep(50);
     } while (result.substring(0, _difficulty) != stringOfZeros);
     return { nonce: nonce, hash: result };
+}
+
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }

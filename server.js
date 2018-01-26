@@ -52,14 +52,12 @@ app.get('/randomPicture', (req, res) => {
     fs.readdir(pictureDirectory, (err, files) => {
         if (err) throw err;
         let rand = files[Math.floor(Math.random() * files.length)];
-        console.log(rand)
         res.sendFile(`${__dirname}/public/pictures/${rand}`)
     })
 })
 
-
 app.get('/challenge.json', (req, res) => {
-    let difficulty = 4;
+    let difficulty = 2;
     let challenge = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     challengeMapping[challenge] = { status: 'valid', difficulty: difficulty };
     res.json({ challenge: challenge, difficulty: difficulty })

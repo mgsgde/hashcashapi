@@ -279,6 +279,30 @@
 "use strict";
 
 
+let generatePoWToken = (() => {
+    var _ref = _asyncToGenerator(function* (_challenge, _difficulty) {
+        let nonce = -1;
+        let result;
+        let arrayOfZeros = [];
+        for (var i = 1; i <= _difficulty; i++) {
+            arrayOfZeros.push(0);
+        }
+        let stringOfZeros = arrayOfZeros.join("");
+        do {
+            result = SHA256(`${_challenge} + ${++nonce}`).toString();
+            self.postMessage({ nonce: nonce, hash: result });
+            yield sleep(50);
+        } while (result.substring(0, _difficulty) != stringOfZeros);
+        return { nonce: nonce, hash: result };
+    });
+
+    return function generatePoWToken(_x, _x2) {
+        return _ref.apply(this, arguments);
+    };
+})();
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
 const SHA256 = __webpack_require__(18);
 
 self.addEventListener('message', function (e) {
@@ -286,18 +310,8 @@ self.addEventListener('message', function (e) {
     self.postMessage({ nonce: result.nonce, hash: result.hash });
 }, false);
 
-function generatePoWToken(_challenge, _difficulty) {
-    let nonce = -1;
-    let result;
-    let arrayOfZeros = [];
-    for (var i = 1; i <= _difficulty; i++) {
-        arrayOfZeros.push(0);
-    }
-    let stringOfZeros = arrayOfZeros.join("");
-    do {
-        result = SHA256(`${_challenge} + ${++nonce}`).toString();
-    } while (result.substring(0, _difficulty) != stringOfZeros);
-    return { nonce: nonce, hash: result };
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 /***/ }),

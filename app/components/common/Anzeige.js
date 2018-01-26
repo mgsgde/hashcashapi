@@ -7,7 +7,6 @@ class Anzeige extends React.Component {
   			 <img  id="anzeige" />
   		)
 	}
-
 }
 
 export default Anzeige

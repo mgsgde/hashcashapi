@@ -63,18 +63,18 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 27);
+/******/ 	return __webpack_require__(__webpack_require__.s = 44);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 18:
+/***/ 34:
 /***/ (function(module, exports, __webpack_require__) {
 
 ;(function (root, factory) {
 	if (true) {
 		// CommonJS
-		module.exports = exports = factory(__webpack_require__(28));
+		module.exports = exports = factory(__webpack_require__(45));
 	}
 	else if (typeof define === "function" && define.amd) {
 		// AMD
@@ -273,7 +273,7 @@
 
 /***/ }),
 
-/***/ 27:
+/***/ 44:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -303,7 +303,7 @@ let generatePoWToken = (() => {
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
-const SHA256 = __webpack_require__(18);
+const SHA256 = __webpack_require__(34);
 
 self.addEventListener('message', function (e) {
     let result = generatePoWToken(e.data.challenge, e.data.difficulty);
@@ -316,7 +316,7 @@ function sleep(ms) {
 
 /***/ }),
 
-/***/ 28:
+/***/ 45:
 /***/ (function(module, exports, __webpack_require__) {
 
 ;(function (root, factory) {

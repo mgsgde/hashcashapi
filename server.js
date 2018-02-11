@@ -47,13 +47,11 @@ app.get('/icons/snowflake.png', (req, res) => {
     res.sendFile(__dirname + "/public/icons/snowflake.png")
 })
 
+
+
 app.get('/randomPicture', (req, res) => {
-    const pictureDirectory = `${__dirname}/public/pictures`
-    fs.readdir(pictureDirectory, (err, files) => {
-        if (err) throw err;
-        let rand = files[Math.floor(Math.random() * files.length)];
-        res.sendFile(`${__dirname}/public/pictures/${rand}`)
-    })
+    let pic = getRandomPic();
+    res.sendFile(pic)
 })
 
 app.get('/challenge.json', (req, res) => {
@@ -64,3 +62,20 @@ app.get('/challenge.json', (req, res) => {
 })
 
 app.listen(3000, () => console.log('Example app listening on port 3000!'))
+
+
+
+let prevPic;
+
+function getRandomPic() {
+    const pictureDirectory = `${__dirname}/public/pictures`
+    let files = fs.readdirSync(pictureDirectory)
+    let rand = files[Math.floor(Math.random() * files.length)];
+    if (prevPic && rand == prevPic) {
+        return getRandomPic()
+    } else {
+        prevPic = rand
+        return `${__dirname}/public/pictures/${rand}`;
+    }
+
+}

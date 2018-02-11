@@ -1657,38 +1657,56 @@ class POW extends React.Component {
     this.state = {
       hash: "",
       nonce: "",
-      challenge: " "
+      challenge: " ",
+      difficulty: " "
     };
   }
 
   generatePoW() {
 
+    var worker = new Worker('/pow.js');
+    worker.postMessage({
+      challenge: this.state.challenge,
+      difficulty: this.state.difficulty
+    });
+    worker.addEventListener('message', e => {
+
+      jQuery("#nonce").addClass("flashBlue");
+      jQuery("#hash").addClass("flashBlue");
+
+      this.setState({
+        challenge: this.state.challenge,
+        nonce: e.data.nonce,
+        hash: e.data.hash
+      });
+      // $("#genpowbtn").addClass("disabled")
+      // $("#challengebtn").removeClass("disabled")
+      document.getElementById("powLoader").style.visibility = "hidden";
+    }, false);
+    $("#nonce, #hash").removeClass("flashBlue");
+  }
+
+  getChallenge() {
     fetch('challenge.json').then(response => {
       return response.json();
     }).then(data => {
-      let difficulty = data.difficulty;
-      let challenge = data.challenge;
-      // document.getElementById("powLoader").style.visibility = "visible";
-      // document.getElementById('hashTextField').value = ""
-      var worker = new Worker('/pow.js');
-      worker.postMessage({
-        challenge: challenge,
-        difficulty: difficulty
+      // $("#genpowbtn").removeClass("disabled")
+      // $("#challengebtn").addClass("disabled")
+      $("#challenge, #nonce, #hash").empty();
+
+      jQuery("#challenge").addClass("flashGreen");
+      jQuery("#difficulty").addClass("flashGreen");
+
+      setTimeout(function () {
+        $("#challenge, #difficulty").removeClass("flashGreen");
+      }, 1000); // Timeout must be the same length as the CSS3 transition or longer (or you'll mess up the transition)
+
+
+      console.log(data.difficulty);
+      this.setState({
+        challenge: data.challenge,
+        difficulty: data.difficulty
       });
-      worker.addEventListener('message', e => {
-        console.log("e.data.nonce", e.data.nonce);
-        this.setState({
-          challenge: challenge,
-          nonce: e.data.nonce,
-          hash: e.data.hash
-        });
-        // document.getElementById('hashTextField').value = JSON.stringify({
-        //   challenge: challenge,
-        //   nonce: e.data.nonce,
-        //   hash: e.data.hash
-        // });
-        document.getElementById("powLoader").style.visibility = "hidden";
-      }, false);
     });
   }
 
@@ -1719,17 +1737,17 @@ class POW extends React.Component {
       React.createElement(
         'div',
         { 'class': 'row' },
-        React.createElement('div', { 'class': 'col-10 offset-2' })
-      ),
-      React.createElement(
-        'div',
-        { 'class': 'row' },
         React.createElement(
           'div',
-          { 'class': 'col-10 offset-2' },
+          { 'class': 'btn-group', role: 'group', style: { margin: "auto", width: "340px", display: "block" } },
           React.createElement(
             'button',
-            { className: 'btn btn-primary', onClick: this.generatePoW.bind(this), style: { margin: "0 auto", display: "block" } },
+            { id: 'challengebtn', type: 'btn', className: 'btn btn-success', onClick: this.getChallenge.bind(this) },
+            'Get Challenge'
+          ),
+          React.createElement(
+            'button',
+            { id: 'genpowbtn', className: 'btn btn-primary', onClick: this.generatePoW.bind(this), style: { margin: "0 auto", display: "block" } },
             ' Generate Proof of Work Token'
           )
         )
@@ -1743,7 +1761,7 @@ class POW extends React.Component {
           React.createElement(
             'div',
             { 'class': 'panel-body' },
-            'HASCH('
+            'HASH('
           )
         ),
         React.createElement(
@@ -1797,7 +1815,34 @@ class POW extends React.Component {
           React.createElement(
             'div',
             { 'class': 'panel-body' },
-            'hashwert'
+            'Hashwert'
+          )
+        ),
+        React.createElement(
+          'div',
+          { 'class': 'panel panel-default', style: { float: "left", fontSize: "28px" } },
+          React.createElement(
+            'div',
+            { 'class': 'panel-body' },
+            '(difficulty:'
+          )
+        ),
+        React.createElement(
+          'div',
+          { 'class': 'panel panel-default', style: { float: "left", fontSize: "28px" } },
+          React.createElement(
+            'div',
+            { id: 'difficulty', 'class': 'well', style: { height: "71.11px" } },
+            this.state.difficulty
+          )
+        ),
+        React.createElement(
+          'div',
+          { 'class': 'panel panel-default', style: { float: "left", fontSize: "28px" } },
+          React.createElement(
+            'div',
+            { 'class': 'panel-body' },
+            ')'
           )
         )
       ),
@@ -1810,7 +1855,7 @@ class POW extends React.Component {
           React.createElement(
             'div',
             { 'class': 'panel-body' },
-            'HASCH('
+            'HASH('
           )
         ),
         React.createElement(
@@ -1818,7 +1863,7 @@ class POW extends React.Component {
           { 'class': 'panel panel-default', style: { float: "left", fontSize: "22px", width: "296px" } },
           React.createElement(
             'div',
-            { 'class': 'well', style: { height: "71.11px" } },
+            { id: 'challenge', 'class': 'well', style: { height: "71.11px" } },
             this.state.challenge
           )
         ),
@@ -1836,7 +1881,7 @@ class POW extends React.Component {
           { 'class': 'panel panel-default', style: { float: "left", fontSize: "22px", width: "106px" } },
           React.createElement(
             'div',
-            { 'class': 'well', style: { height: "71.11px", textAlign: "center" } },
+            { id: 'nonce', 'class': 'well', style: { height: "71.11px", textAlign: "center" } },
             this.state.nonce
           )
         ),
@@ -1863,7 +1908,7 @@ class POW extends React.Component {
           { 'class': 'panel panel-default', style: { float: "left", fontSize: "22px", width: "300px" } },
           React.createElement(
             'div',
-            { 'class': 'well', style: { height: "71.11px" } },
+            { id: 'hash', 'class': 'well', style: { height: "71.11px" } },
             String(this.state.hash).substring(0, 20)
           )
         )
@@ -1929,7 +1974,7 @@ exports = module.exports = __webpack_require__(7)(undefined);
 
 
 // module
-exports.push([module.i, ".loader {\n    border: 16px solid #f3f3f3;\n    border-radius: 50%;\n    border-top: 16px solid #3498db;\n    width: 30px;\n    height: 30px;\n    -webkit-animation: spin 2s linear infinite;\n    /* Safari */\n    animation: spin 2s linear infinite;\n    visibility: 'visible';\n}\n\n@keyframes spin {\n    0% {\n        transform: rotate(0deg);\n    }\n    100% {\n        transform: rotate(360deg);\n    }\n}\n\nh1 {\n    text-align: center;\n}\n\n#pow {\n    margin: auto;\n    width: 850px;\n}\n\n#hashCalculation {\n    display: inline;\n}\n\n#hashTextField {\n    width: 600px;\n    display: inline;\n}\n\n#powLoader {\n    display: inline-flex;\n    visibility: hidden;\n}\n\n#sendPoWTokenButton {\n    display: block;\n    margin: 30px auto 30px auto;\n}\n\n#anzeige {\n    margin: auto;\n    display: block;\n    width: 500px;\n    height: 500px;\n    border: 2;\n    padding-bottom: 50px;\n}\n\n.modal-header-danger {\n    color: #fff;\n    padding: 9px 15px;\n    border-bottom: 1px solid #eee;\n    background-color: #d9534f;\n    -webkit-border-top-left-radius: 5px;\n    -webkit-border-top-right-radius: 5px;\n    -moz-border-radius-topleft: 5px;\n    -moz-border-radius-topright: 5px;\n    border-top-left-radius: 5px;\n    border-top-right-radius: 5px;\n}\n\n.panel {\n    border: none;\n    margin: 5px;\n}\n\n.setinmgs {\n    background-color: #f5f5f5;\n    border: 1px solid #e3e3e3;\n    border-radius: 4px;\n}\n\n.well {\n  margin-bottom: 0;\n}", ""]);
+exports.push([module.i, ".loader {\n    border: 16px solid #f3f3f3;\n    border-radius: 50%;\n    border-top: 16px solid #3498db;\n    width: 30px;\n    height: 30px;\n    -webkit-animation: spin 2s linear infinite;\n    /* Safari */\n    animation: spin 2s linear infinite;\n    visibility: 'visible';\n}\n\n@keyframes spin {\n    0% {\n        transform: rotate(0deg);\n    }\n    100% {\n        transform: rotate(360deg);\n    }\n}\n\nh1 {\n    text-align: center;\n}\n\n#pow {\n    margin: auto;\n    width: 850px;\n}\n\n#hashCalculation {\n    display: inline;\n}\n\n#hashTextField {\n    width: 600px;\n    display: inline;\n}\n\n#powLoader {\n    display: inline-flex;\n    visibility: hidden;\n}\n\n#sendPoWTokenButton {\n    display: block;\n    margin: 30px auto 30px auto;\n}\n\n#anzeige {\n    margin: auto;\n    display: block;\n    width: 500px;\n    height: 500px;\n    border: 2;\n    padding-bottom: 50px;\n}\n\n.modal-header-danger {\n    color: #fff;\n    padding: 9px 15px;\n    border-bottom: 1px solid #eee;\n    background-color: #d9534f;\n    -webkit-border-top-left-radius: 5px;\n    -webkit-border-top-right-radius: 5px;\n    -moz-border-radius-topleft: 5px;\n    -moz-border-radius-topright: 5px;\n    border-top-left-radius: 5px;\n    border-top-right-radius: 5px;\n}\n\n.panel {\n    border: none;\n    margin: 5px;\n}\n\n.setinmgs {\n    background-color: #f5f5f5;\n    border: 1px solid #e3e3e3;\n    border-radius: 4px;\n}\n\n.well {\n  margin-bottom: 0;\n}\n\n\n.flashGreen {\n  -moz-animation: flashGreen 1s ease-out;\n  -moz-animation-iteration-count: 1;\n\n  -webkit-animation: flashGreen 1s ease-out;\n  -webkit-animation-iteration-count: 1;\n\n  -ms-animation: flashGreen 1s ease-out;\n  -ms-animation-iteration-count: 1;\n}\n\n@keyframes flashGreen {\n    0% { background-color: transparent; }\n    50% { background-color: green; }\n    100% { background-color: transparent; }\n}\n\n@-webkit-keyframes flashGreen {\n    0% { background-color: transparent; }\n    50% { background-color: green; }\n    100% { background-color: transparent; }\n}\n\n@-moz-keyframes flashGreen {\n    0% { background-color: transparent; }\n    50% { background-color: green; }\n    100% { background-color: transparent; }\n}\n\n@-ms-keyframes flashGreen {\n    0% { background-color: transparent; }\n    50% { background-color: green; }\n    100% { background-color: transparent; }\n}\n\n.flashBlue {\n  -moz-animation: flashBlue 1s ease-out;\n  -moz-animation-iteration-count: 1;\n\n  -webkit-animation: flashBlue 1s ease-out;\n  -webkit-animation-iteration-count: 1;\n\n  -ms-animation: flashBlue 1s ease-out;\n  -ms-animation-iteration-count: 1;\n}\n\n@keyframes flashBlue {\n    0% { background-color: transparent; }\n    50% { background-color: blue; }\n    100% { background-color: transparent; }\n}\n\n@-webkit-keyframes flashBlue {\n    0% { background-color: transparent; }\n    50% { background-color: blue; }\n    100% { background-color: transparent; }\n}\n\n@-moz-keyframes flashBlue {\n    0% { background-color: transparent; }\n    50% { background-color: blue; }\n    100% { background-color: transparent; }\n}\n\n@-ms-keyframes flashBlue {\n    0% { background-color: transparent; }\n    50% { background-color: blue; }\n    100% { background-color: transparent; }\n}\n\n", ""]);
 
 // exports
 

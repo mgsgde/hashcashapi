@@ -83,3 +83,75 @@ h1 {
 .well {
   margin-bottom: 0;
 }
+
+
+.flashGreen {
+  -moz-animation: flashGreen 1s ease-out;
+  -moz-animation-iteration-count: 1;
+
+  -webkit-animation: flashGreen 1s ease-out;
+  -webkit-animation-iteration-count: 1;
+
+  -ms-animation: flashGreen 1s ease-out;
+  -ms-animation-iteration-count: 1;
+}
+
+@keyframes flashGreen {
+    0% { background-color: transparent; }
+    50% { background-color: green; }
+    100% { background-color: transparent; }
+}
+
+@-webkit-keyframes flashGreen {
+    0% { background-color: transparent; }
+    50% { background-color: green; }
+    100% { background-color: transparent; }
+}
+
+@-moz-keyframes flashGreen {
+    0% { background-color: transparent; }
+    50% { background-color: green; }
+    100% { background-color: transparent; }
+}
+
+@-ms-keyframes flashGreen {
+    0% { background-color: transparent; }
+    50% { background-color: green; }
+    100% { background-color: transparent; }
+}
+
+.flashBlue {
+  -moz-animation: flashBlue 1s ease-out;
+  -moz-animation-iteration-count: 1;
+
+  -webkit-animation: flashBlue 1s ease-out;
+  -webkit-animation-iteration-count: 1;
+
+  -ms-animation: flashBlue 1s ease-out;
+  -ms-animation-iteration-count: 1;
+}
+
+@keyframes flashBlue {
+    0% { background-color: transparent; }
+    50% { background-color: blue; }
+    100% { background-color: transparent; }
+}
+
+@-webkit-keyframes flashBlue {
+    0% { background-color: transparent; }
+    50% { background-color: blue; }
+    100% { background-color: transparent; }
+}
+
+@-moz-keyframes flashBlue {
+    0% { background-color: transparent; }
+    50% { background-color: blue; }
+    100% { background-color: transparent; }
+}
+
+@-ms-keyframes flashBlue {
+    0% { background-color: transparent; }
+    50% { background-color: blue; }
+    100% { background-color: transparent; }
+}
+

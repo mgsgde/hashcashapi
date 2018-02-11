@@ -9,39 +9,57 @@ class POW extends React.Component {
     this.state = {
       hash: "",
       nonce: "",
-      challenge: " "
+      challenge: " ",
+      difficulty: " "
     }
   }
 
   generatePoW() {
 
+    var worker = new Worker('/pow.js');
+    worker.postMessage({
+      challenge: this.state.challenge,
+      difficulty: this.state.difficulty
+    })
+    worker.addEventListener('message', (e) => {
+
+      jQuery("#nonce").addClass("flashBlue");
+      jQuery("#hash").addClass("flashBlue");
+
+      this.setState({
+        challenge: this.state.challenge,
+        nonce: e.data.nonce,
+        hash: e.data.hash
+      });
+      // $("#genpowbtn").addClass("disabled")
+      // $("#challengebtn").removeClass("disabled")
+      document.getElementById("powLoader").style.visibility = "hidden";
+    }, false);
+    $("#nonce, #hash").removeClass("flashBlue");
+  }
+
+  getChallenge() {
     fetch('challenge.json').then((response) => {
       return response.json();
     }).then((data) => {
-      let difficulty = data.difficulty;
-      let challenge = data.challenge;
-      // document.getElementById("powLoader").style.visibility = "visible";
-      // document.getElementById('hashTextField').value = ""
-      var worker = new Worker('/pow.js');
-      worker.postMessage({
-        challenge: challenge,
-        difficulty: difficulty
-      })
-      worker.addEventListener('message', (e) => {
-        console.log("e.data.nonce", e.data.nonce)
-        this.setState({
-          challenge: challenge,
-          nonce: e.data.nonce,
-          hash: e.data.hash
-        });
-        // document.getElementById('hashTextField').value = JSON.stringify({
-        //   challenge: challenge,
-        //   nonce: e.data.nonce,
-        //   hash: e.data.hash
-        // });
-        document.getElementById("powLoader").style.visibility = "hidden";
-      }, false);
-    });
+      // $("#genpowbtn").removeClass("disabled")
+      // $("#challengebtn").addClass("disabled")
+      $("#challenge, #nonce, #hash").empty();
+
+      jQuery("#challenge").addClass("flashGreen");
+      jQuery("#difficulty").addClass("flashGreen");
+
+      setTimeout( function(){
+        $("#challenge, #difficulty").removeClass("flashGreen");
+      }, 1000); // Timeout must be the same length as the CSS3 transition or longer (or you'll mess up the transition)
+
+
+      console.log(data.difficulty)
+      this.setState({
+        challenge: data.challenge,
+        difficulty: data.difficulty
+      });
+    })
   }
 
   sendPoWToken() {
@@ -73,23 +91,19 @@ class POW extends React.Component {
 
       <div class="container">
         <div class="row">
-          <div class="col-10 offset-2">
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-10 offset-2">
-            <button className="btn btn-primary" onClick={ this.generatePoW.bind(this) } style={ { margin: "0 auto", display: "block" } }> Generate Proof of Work Token
-            </button>
+          <div class="btn-group" role="group" style={ { margin: "auto", width: "340px", display: "block" } }>
+            <button id="challengebtn" type="btn" className="btn btn-success" onClick={ this.getChallenge.bind(this) }>Get Challenge</button>
+            <button id="genpowbtn" className="btn btn-primary" onClick={ this.generatePoW.bind(this) } style={ { margin: "0 auto", display: "block" } }> Generate Proof of Work Token</button>
           </div>
         </div>
         <div class="row">
           <div class="panel panel-default" style={ { float: "left", fontSize: "28px" } }>
             <div class="panel-body">
-              HASCH(
+              HASH(
             </div>
           </div>
           <div class="panel panel-default" style={ { float: "left", fontSize: "28px", width: "296px" } }>
-            <div class="panel-body" style={{textAlign: "center"}}>
+            <div class="panel-body" style={ { textAlign: "center" } }>
               challenge
             </div>
           </div>
@@ -115,18 +129,35 @@ class POW extends React.Component {
           </div>
           <div class="panel panel-default" style={ { float: "left", fontSize: "28px" } }>
             <div class="panel-body">
-              hashwert
+              Hashwert
+            </div>
+          </div>
+          <div class="panel panel-default" style={ { float: "left", fontSize: "28px" } }>
+            <div class="panel-body">
+              (difficulty:
+            </div>
+          </div>
+          <div class="panel panel-default" style={ { float: "left", fontSize: "28px" } }>
+            <div id="difficulty" class="well" style={ { height: "71.11px" } }>
+              { this.state.difficulty }
+            </div>
+          </div>
+                    <div class="panel panel-default" style={ { float: "left", fontSize: "28px" } }>
+         <div class="panel-body">
+              )
             </div>
           </div>
         </div>
         <div class="row">
           <div class="panel panel-default" style={ { float: "left", fontSize: "28px" } }>
             <div class="panel-body">
-              HASCH(
+              HASH(
             </div>
           </div>
           <div class="panel panel-default" style={ { float: "left", fontSize: "22px", width: "296px" } }>
-            <div class="well" style={{height: "71.11px"}}>{ this.state.challenge }</div>
+            <div id="challenge" class="well" style={ { height: "71.11px" } }>
+              { this.state.challenge }
+            </div>
           </div>
           <div class="panel panel-default" style={ { float: "left", fontSize: "28px" } }>
             <div class="panel-body">
@@ -134,7 +165,7 @@ class POW extends React.Component {
             </div>
           </div>
           <div class="panel panel-default" style={ { float: "left", fontSize: "22px", width: "106px" } }>
-            <div class="well" style={{height: "71.11px", textAlign: "center"}}>
+            <div id="nonce" class="well" style={ { height: "71.11px", textAlign: "center" } }>
               { this.state.nonce }
             </div>
           </div>
@@ -149,8 +180,8 @@ class POW extends React.Component {
             </div>
           </div>
           <div class="panel panel-default" style={ { float: "left", fontSize: "22px", width: "300px" } }>
-            <div class="well" style={{height: "71.11px"}}>
-              { String(this.state.hash).substring(0,20) }
+            <div id="hash" class="well" style={ { height: "71.11px" } }>
+              { String(this.state.hash).substring(0, 20) }
             </div>
           </div>
         </div>

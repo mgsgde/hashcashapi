@@ -61,7 +61,10 @@ app.get('/challenge.json', (req, res) => {
     res.json({ challenge: challenge, difficulty: difficulty })
 })
 
-app.listen(3000, () => console.log('Example app listening on port 3000!'))
+
+let port = process.env.NODE_ENV == "PRODUCTION" ? 80 : 3000;
+
+app.listen(port, () => console.log(`Example app listening on port ${port}!`))
 
 
 

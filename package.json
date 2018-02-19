@@ -34,7 +34,8 @@
     "watch:build": "webpack -w",
     "watch:server": "nodemon server.js",
     "dev": "npm-run-all --parallel watch:build watch:server",
-    "start": "node server.js",
+    "prestart": "webpack",
+    "start": "NODE_ENV=PRODUCTION node server.js",
     "test": "mocha tests"
   },
   "repository": {
